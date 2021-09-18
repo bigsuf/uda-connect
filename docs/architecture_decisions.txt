@@ -1,0 +1,37 @@
+i'm assume that the bottle neck in the system, is when add a new location form user.
+because we will have a huge amount of resuests ot add new location, and while the system is growing it will take more time and effort.
+on other hand CRUD operation (add - get) for person model will not have a big impact on system performance.
+because it's not have any big business logic behind it. and the trific on these request not repeted sequentially.
+
+BTW, i'm assume getting avalibility connection based on current user location will not cause performance isssue.
+and our service can handle these request. but when i seperate person and location logic on there own services i need to call
+location list and person list via gRPC endpoint.
+
+I will distribute the system into microservice as following.
+1. person service: represent all process required to handle user (person data).
+2. location service: represent all porcess required to handle user location data.
+3. connection service: get the potential user connections based on exist data on DB.
+4. gRPC service: provide gRPC endpoint for person and location.
+5. front app: provice user interface for the system to end user.
+6. PostgreSQL server itself
+7. kafka server itself
+
+So, i have using 3 technique of message passing when i refactor this system
+
+- RESTfull message passing
+i use this technique to allow fornt app operate all CRUD operation through rest endpoint, the operation is self will not take
+abig amount of time for now. may be in future we can refactor it to using anther way (EX: gRPC) if it becam a bottel neck for the system.
+the end point i will using RESTfull message passing is
+1. create new person
+2. list all avaliable persons in the system.
+3. create new location for user.
+4. get the potential user connections.
+these endpoint i assume not have any issue in performance or response time even on big trific based on current system status.
+
+- gRPC message passing
+i use this technique to allow get both of person data and location data at on get the potential user connections.
+this will allow to me collect required data fast thanks of gRPC technology, and make sure is the data consintant to both model stracther.
+
+- Kafka message passing
+based on assumtion that the current bottel neck in the system is create new user location, i'll use kafka to host user location.
+once new location request recived. a Kafka consumer will fir and save recived location on dtabase.
