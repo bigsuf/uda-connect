@@ -6,6 +6,7 @@ data:
   DB_HOST: "postgres"
   DB_PORT: "5432"
   KAFKA_TOPICS: "location"
-  KAFKA_URL: "kafka.default.svc.cluster.local:9092"
+  KAFKA_URL: "kafka-service.kafka.svc.cluster.local:9092"
+  GRPC_URL: "udaconnect-grpc.default.svc.cluster.local:30003"
 metadata:
   name: db-env
