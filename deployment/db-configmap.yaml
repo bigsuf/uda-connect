@@ -5,5 +5,7 @@ data:
   DB_NAME: "geoconnections"
   DB_HOST: "postgres"
   DB_PORT: "5432"
+  KAFKA_TOPICS: "location"
+  KAFKA_URL: "kafka.default.svc.cluster.local:9092"
 metadata:
   name: db-env
