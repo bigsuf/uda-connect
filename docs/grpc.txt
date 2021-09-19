@@ -1,0 +1,7 @@
+on deployment folder you can up and running gRPC deployment to start gRPC server on port 30003.
+to consume this point you have to navegaite into models folder in sub directory grp-server
+and you will finde the required files to up and running these services
+- get all poersons execpt the person id you pass
+- get all location for person and filter by date
+
+for input and out put review person.proto and location.proto

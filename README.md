@@ -1,4 +1,38 @@
 # UdaConnect
+## How to Run Applcation Version 2
+
+### Technologies
+* [Flask](https://flask.palletsprojects.com/en/1.1.x/) - API webserver
+* [SQLAlchemy](https://www.sqlalchemy.org/) - Database ORM
+* [PostgreSQL](https://www.postgresql.org/) - Relational database
+* [PostGIS](https://postgis.net/) - Spatial plug-in for PostgreSQL enabling geographic queries]
+* [Vagrant](https://www.vagrantup.com/) - Tool for managing virtual deployed environments
+* [VirtualBox](https://www.virtualbox.org/) - Hypervisor allowing you to run multiple operating systems
+* [K3s](https://k3s.io/) - Lightweight distribution of K8s to easily develop against a local cluster
+* [Kafka](https://kafka.apache.org) - Apache Kafka is an open-source distributed event streaming platform.
+
+## Running the app
+The project has been set up such that you should be able to have the project up and running with Kubernetes.
+
+you have own kafka cluster on namespace `Kafka`
+
+### Steps
+1. `kubectl apply -f deployment/db-configmap.yaml` - Set up environment variables for the pods
+2. `kubectl apply -f deployment/db-secret.yaml` - Set up secrets for the pods
+3. `kubectl apply -f deployment/postgres.yaml` - Set up a Postgres database running PostGIS
+4. `kubectl apply -f deployment/udaconnect-grpc.yaml` - Set up the service and deployment for the API
+5. `kubectl apply -f deployment/udaconnect-consumer.yaml` - Set up the service and deployment for the API
+6. `kubectl apply -f deployment/udaconnect-person.yaml` - Set up the service and deployment for the API
+7. `kubectl apply -f deployment/udaconnect-location.yaml` - Set up the service and deployment for the API
+8. `kubectl apply -f deployment/udaconnect-connection.yaml` - Set up the service and deployment for the API
+9. `kubectl apply -f deployment/udaconnect-app.yaml` - Set up the service and deployment for the web app
+10. `sh scripts/run_db_command.sh <POD_NAME>` - Seed your database against the `postgres` pod. (`kubectl get pods` will give you the `POD_NAME`)
+
+Manually applying each of the individual `yaml` files is cumbersome but going through each step provides some context on the content of the starter project. In practice, we would have reduced the number of steps by running the command against a directory to apply of the contents: `kubectl apply -f deployment/`.
+
+Note: The first time you run this project, you will need to seed the database with dummy data. Use the command `sh scripts/run_db_command.sh <POD_NAME>` against the `postgres` pod. (`kubectl get pods` will give you the `POD_NAME`). Subsequent runs of `kubectl apply` for making changes to deployments or services shouldn't require you to seed the database again!
+
+---
 ## Overview
 ### Background
 Conferences and conventions are hotspots for making connections. Professionals in attendance often share the same interests and can make valuable business and personal connections with one another. At the same time, these events draw a large crowd and it's often hard to make these connections in the midst of all of these events' excitement and energy. To help attendees make connections, we are building the infrastructure for a service that can inform attendees if they have attended the same booths and presentations at an event.
