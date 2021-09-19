@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+
+message Location {
+  string longitude = 1;
+  string latitude = 2;
+}
+
+message LocationList {
+  repeated Location locations = 1;
+}
+
+message LocationQuery{
+    int32 person_id = 1;
+    google.protobuf.Timestamp creation_time = 2;
+}
+
+service LocationService {
+    rpc Filter(LocationQuery) returns (LocationList);
+}
