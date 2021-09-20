@@ -17,9 +17,6 @@ DB_PORT = os.environ["DB_PORT"]
 DB_NAME = os.environ["DB_NAME"]
 DB_URL = f"postgresql://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}",
 
-engine = create_engine(DB_URL, echo=True)
-CONN = engine.connect()
-
 
 class PersonServicer(person_pb2_grpc.PersonServiceServicer):
     def Filter(self, request, context):
@@ -27,9 +24,12 @@ class PersonServicer(person_pb2_grpc.PersonServiceServicer):
 
         response = person_pb2.PersonList()
 
+        engine = create_engine(DB_URL, echo=True)
+        person_conn = engine.connect()
+
         # send DB query to get target person
         query = text("SELECT * FROM person WHERE id!=:person_id")
-        result = CONN.execute(query, person_id=person_id)
+        result = person_conn.execute(query, person_id=person_id)
 
         # format person as person response
         for row in result:
@@ -51,6 +51,9 @@ class LocationService(location_pb2_grpc.LocationServiceServicer):
 
         response = location_pb2.LocationList()
 
+        engine = create_engine(DB_URL, echo=True)
+        location_conn = engine.connect()
+
         query = text("""
         SELECT *
         FROM location
@@ -59,7 +62,7 @@ class LocationService(location_pb2_grpc.LocationServiceServicer):
         AND :creation_time >= start_date
         """)
 
-        result = CONN.execute(
+        result = location_conn.execute(
             query,
             person_id=person_id,
             creation_time=start_time

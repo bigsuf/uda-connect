@@ -33,8 +33,13 @@ spec:
       containers:
         - image: bigsuf/udaconnect-connection:latest
           name: udaconnect-connection
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           env:
+            - name: GRPC_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: db-env
+                  key: GRPC_URL
             - name: DB_USERNAME
               valueFrom:
                 configMapKeyRef:
@@ -60,9 +65,4 @@ spec:
                 configMapKeyRef:
                   name: db-env
                   key: DB_PORT
-            - name: GRPC_URL
-              valueFrom:
-                configMapKeyRef:
-                  name: db-env
-                  key: GRPC_URL
       restartPolicy: Always

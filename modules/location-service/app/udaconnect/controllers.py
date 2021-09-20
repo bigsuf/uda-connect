@@ -14,8 +14,8 @@ DATE_FORMAT = "%Y-%m-%d"
 api = Namespace("UdaConnect", description="Connections via geolocation.")  # noqa
 
 
-TOPIC_NAME = os.environ('KAFKA_URL')
-KAFKA_SERVER = os.environ('KAFKA_URL')
+TOPIC_NAME = os.environ["KAFKA_URL"]
+KAFKA_SERVER = os.environ["KAFKA_URL"]
 
 # TODO: This needs better exception handling
 

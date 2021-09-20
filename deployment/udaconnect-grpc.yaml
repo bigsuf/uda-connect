@@ -33,7 +33,7 @@ spec:
       containers:
         - image: bigsuf/udaconnect-grpc:latest
           name: udaconnect-grpc
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           env:
             - name: DB_USERNAME
               valueFrom:

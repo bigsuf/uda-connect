@@ -17,7 +17,7 @@ spec:
       containers:
         - image: bigsuf/udaconnect-consumer:latest
           name: udaconnect-consumer
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           env:
             - name: DB_USERNAME
               valueFrom:

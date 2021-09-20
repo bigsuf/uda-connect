@@ -13,7 +13,7 @@ DB_NAME = os.environ["DB_NAME"]
 DB_URL = f"postgresql://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
 
 KAFKA_URL = os.environ["KAFKA_URL"]
-KAFKA_TOPIC = os.environ["KAFKA_TOPIC"]
+
 
 def save_location(location: dict):
     engine = create_engine(DB_URL, echo=True)
@@ -28,9 +28,10 @@ def save_location(location: dict):
     print(insert)
     conn.execute(insert)
 
+
 if __name__ == "__main__":
     # init kafka consumer for location topic
-    location_consumer = KafkaConsumer(KAFKA_TOPIC, bootstrap_servers=[KAFKA_URL])
+    location_consumer = KafkaConsumer("location", bootstrap_servers=[KAFKA_URL])
 
     for location in location_consumer:
         message = location.value.decode('utf-8')

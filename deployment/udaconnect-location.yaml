@@ -33,7 +33,7 @@ spec:
       containers:
         - image: bigsuf/udaconnect-location:latest
           name: udaconnect-location
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           env:
             - name: DB_USERNAME
               valueFrom:
