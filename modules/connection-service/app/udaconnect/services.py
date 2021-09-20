@@ -8,21 +8,15 @@ from app import db
 from app.udaconnect.models import Connection, Location, Person
 from sqlalchemy.sql import text
 
-import location_pb2
-import location_pb2_grpc
-import person_pb2
-import person_pb2_grpc
-
 logging.basicConfig(level=logging.WARNING)
 logger = logging.getLogger("udaconnect-api")
 
-GRPC_SERVISER = os.environ("GRPC_URL")
+GRPC_SERVISER = os.environ["GRPC_URL"]
 
 
 class ConnectionService:
     @staticmethod
-    def find_contacts(person_id: int, start_date: datetime, end_date: datetime, meters=5
-    ) -> List[Connection]:
+    def find_contacts(person_id: int, start_date: datetime, end_date: datetime, meters=5) -> List[Connection]:
         """
         Finds all Person who have been within a given distance of a given Person within a date range.
 
@@ -30,6 +24,9 @@ class ConnectionService:
         large datasets. This is by design: what are some ways or techniques to help make this data integrate more
         smoothly for a better user experience for API consumers?
         """
+        from .. import (location_pb2, location_pb2_grpc, person_pb2,
+                        person_pb2_grpc)
+
         channel = grpc.insecure_channel(GRPC_SERVISER)
 
         location_stub = location_pb2_grpc.LocationService(channel)
