@@ -1,0 +1,226 @@
+openapi: 3.0.0
+info:
+  title: UdaConnect Endpoint
+  description: Alls API for Udaconnect project
+  version: 1.0.0
+paths:
+  /api/persons:
+    get:
+      summary: Gets every Person
+      description: |
+        Retrieves all Persons stored in the database
+      operationId: getPersons
+      responses:
+        "200":
+          description: Successfully retrieved all Persons
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/PersonResponse"
+        "400":
+          description: Bad input parameter
+    post:
+      summary: Creates a new Person record in the database
+      description: |
+        Create a new person record in the database with specific attributes
+      operationId: createPerson
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Person"
+      responses:
+        "200":
+          description: Successfully created a new Person
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Person"
+        "400":
+          description: Bad input parameter
+  /api/persons/{person_id}/connection:
+    get:
+      summary: Gets the connections of a specific Person
+      description: |
+        Retrieves all connections for a specific Person
+      operationId: getConnections
+      parameters:
+        - in: query
+          description: Proximity to a given user in meters
+          name: distance
+          required: True
+          schema:
+            type: string
+        - in: query
+          description: Start date range
+          name: startDate
+          required: True
+          schema:
+            type: string
+        - in: query
+          description: End date range
+          name: endDate
+          required: True
+          schema:
+            type: string
+        - name: person_id
+          in: path
+          description: The Person's ID
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successfully retrieved all connections for a Person
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Connection"
+        "400":
+          description: Bad input parameter
+  /api/locations/{location_id}:
+    get:
+      summary: Gets a specific location by its ID
+      description: |
+        Retrieves all the details of a specific location
+      operationId: getLocation
+      parameters:
+        - name: location_id
+          in: path
+          description: The Locations's ID
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Successfully retrieved the location specified
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LocationResponse"
+        "400":
+          description: Bad input parameter
+        "404":
+          description: The specified location ID was not found in the database
+  /api/locations/:
+    post:
+      summary: Creates a new Location record in the database
+      description: |
+        Create a new location record in the database with specific attributes
+      operationId: createLocation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                status:
+                  type: string
+                  example: "Done"
+      responses:
+        "202":
+          description: The request was accepted
+        "400":
+          description: Bad input parameter
+components:
+  schemas:
+    PersonResponse:
+      required:
+        - id
+        - first_name
+        - last_name
+        - company_name
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        first_name:
+          type: string
+          example: "Dimitris"
+        last_name:
+          type: string
+          example: "Poulopoulos"
+        company_name:
+          type: string
+          example: "Dimpo"
+    Person:
+      required:
+        - first_name
+        - last_name
+        - company_name
+      type: object
+      properties:
+        first_name:
+          type: string
+          example: "Dimitris"
+        last_name:
+          type: string
+          example: "Poulopoulos"
+        company_name:
+          type: string
+          example: "Dimpo"
+    Connection:
+      required:
+        - person
+        - location
+      type: object
+      properties:
+        person:
+          type: object
+          example:
+            - id: 6
+              first_name: "Dimitris"
+              last_name: "Poulopoulos"
+              company_name: "Dimpo"
+        location:
+          type: object
+          example:
+            - id: 30
+              person_id: 5
+              longitude: 37.55363
+              latitude: -122.290883
+              creation_time: "2020-08-15T10:37:06"
+    Location:
+      required:
+        - person_id
+        - longitude
+        - latitude
+      type: object
+      properties:
+        person_id:
+          type: integer
+          example: 1
+        longitude:
+          type: string
+          example: "100"
+        latitude:
+          type: string
+          example: "-220"
+    LocationResponse:
+      required:
+        - id
+        - person_id
+        - longitude
+        - latitude
+        - creation_time
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        person_id:
+          type: integer
+          example: 6
+        longitude:
+          type: string
+          example: "100"
+        latitude:
+          type: string
+          example: "-220"
+        creation_time:
+          type: string
+          example: "2020-08-15T10:37:06"
